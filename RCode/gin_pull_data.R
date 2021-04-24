@@ -27,114 +27,114 @@ library(dplyr)
 
 gin.base <- sf::st_read(dsn = "GIN_2021", layer = "sous_prefectures")
 
-# gin.grid <- gengrid(dsn = "GIN_2021", layer = "sous_prefectures", 
-#                     raster_tif = "gin_ppp_2020_UNadj_constrained.tif")
-# sf::st_write(obj = gin.grid$polygon_dt, dsn = "GIN_2021", layer = "gin_poly", driver = "ESRI Shapefile")
-# 
-# # gin.base <- sf::st_make_valid(gin.base)
-# # gin.base <- gin.base[sf::st_geometry_type(gin.base$geometry) == "MULTIPOLYGON",]
-# # gin.base <- rmapshaper::ms_simplify(gin.base)
-# # gin.base <- sf::st_make_valid(gin.base)
-# 
-# sf::st_write(gin.base, dsn = "GIN_2021", layer = "sous_prefectures_valid", driver = "ESRI Shapefile",
-#              append = FALSE)
+gin.grid <- gengrid(dsn = "GIN_2021", layer = "sous_prefectures",
+                    raster_tif = "gin_ppp_2020_UNadj_constrained.tif")
+sf::st_write(obj = gin.grid$polygon_dt, dsn = "GIN_2021", layer = "gin_poly", driver = "ESRI Shapefile")
+
+gin.base <- sf::st_make_valid(gin.base)
+gin.base <- gin.base[sf::st_geometry_type(gin.base$geometry) == "MULTIPOLYGON",]
+gin.base <- rmapshaper::ms_simplify(gin.base)
+gin.base <- sf::st_make_valid(gin.base)
+
+sf::st_write(gin.base, dsn = "GIN_2021", layer = "sous_prefectures_valid", driver = "ESRI Shapefile",
+             append = FALSE)
 
 
-# gin.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                                  gee_polygons = "users/ifeanyiedochie/gin_poly",
-#                                  gee_datestart = "2018-07-01",
-#                                  gee_dateend = "2018-09-30",
-#                                  gee_desc = "GIN_NTL_2018JulSep",
-#                                  ldrive_dsn = "GIN_2021/GIN_NTL_2018JulSep")
-# gin.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                                   gee_polygons = "users/ifeanyiedochie/gin_poly",
-#                                   gee_datestart = "2019-04-01",
-#                                   gee_dateend = "2019-06-30",
-#                                   gee_desc = "GIN_NTL_2019AprJun",
-#                                   ldrive_dsn = "GIN_2021/GIN_NTL_2019AprJun")
-# ##name the ntl indicator real quick
-# ginntl_julsep.dt <- sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2018JulSep_2021_04_08_12_56_31")
-# ginntl_aprjun.dt <- sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2019AprJun_2021_04_08_12_50_58")
-# 
-# names(ginntl_aprjun.dt)[names(ginntl_aprjun.dt) == "mean"] <- "mean_ntlaprjun19"
-# names(ginntl_julsep.dt)[names(ginntl_julsep.dt) == "mean"] <- "mean_ntljulsep18"
-# 
-# 
-# gin.no2 <- gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                         gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
-#                         gee_band = "tropospheric_NO2_column_number_density",
-#                         gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
-#                         gee_datestart = "2018-07-01",
-#                         gee_dateend = "2018-09-30",
-#                         gee_desc = "GIN_NO2_2018JulSep",
-#                         ldrive_dsn = "GIN_2021/GIN_NO2_2018JulSep")
-# ginno2_julsep.dt <- sf::st_read(dsn = "GIN_2021", layer = "GIN_NO2_2018JulSep_2021_04_08_13_38_59")
-# names(ginno2_julsep.dt)[names(ginno2_julsep.dt) == "mean"] <- "mean_no2julsep18"
-# 
-# gin.no21 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                                   gee_polygons = "users/ifeanyiedochie/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
-#                                   gee_band = "tropospheric_NO2_column_number_density",
-#                                   gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
-#                                   gee_datestart = "2019-04-01",
-#                                   gee_dateend = "2019-06-30",
-#                                   gee_desc = "GIN_NO2_2019AprJun",
-#                                   ldrive_dsn = "GIN_2021/GIN_NO2_2019AprJun")
-# ##pull in the landcover data
-# SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                       gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
-#                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-#                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-#                                    "water-permanent-coverfraction","water-seasonal-coverfraction",
-#                                    "moss-coverfraction"),
-#                       gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-#                       gee_datestart = "2018-07-01",
-#                       gee_dateend = "2018-09-30",
-#                       gee_desc = "GIN_LC_2018JulSep",
-#                       ldrive_dsn = "GIN_2021/GIN_LC_2018JulSep")
-# 
-# SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                       gee_polygons = "users/ifeanyiedochie/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
-#                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-#                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-#                                    "water-permanent-coverfraction","water-seasonal-coverfraction",
-#                                    "moss-coverfraction"),
-#                       gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-#                       gee_datestart = "2019-04-01",
-#                       gee_dateend = "2019-06-30",
-#                       gee_desc = "GIN_LC_2019AprJun",
-#                       ldrive_dsn = "GIN_2021/GIN_LC_2019AprJun")
-# 
-# 
-# ## pull the data on impervious surface
-# SAEplus::gee_pullimage(gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
-#                        gee_band = "change_year_index",
-#                        gee_dataname = "Tsinghua/FROM-GLC/GAIA/v10",
-#                        gee_desc = "GIN_IS_2018JulSep",
-#                        ldrive_dsn = "GIN_2021/GIN_IS_2018JulSep")
-#
-## include other GEE data on CO, global human modification, gridmet drought data
-# SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                       gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
-#                       gee_band = c("CO_column_number_density", "H2O_column_number_density",
-#                                    "cloud_height"),
-#                       gee_dataname = "COPERNICUS/S5P/NRTI/L3_CO",
-#                       gee_datestart = "2018-07-01",
-#                       gee_dateend = "2018-09-30",
-#                       gee_desc = "GIN_CO_2018JulSep",
-#                       ldrive_dsn = "GIN_2021/GIN_CO_2018JulSep",
-#                       gee_crs = "WGS84")
-# 
-# SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures", 
-#                       gee_polygons = "users/ifeanyiedochie/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
-#                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-#                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-#                                    "water-permanent-coverfraction","water-seasonal-coverfraction",
-#                                    "moss-coverfraction"),
-#                       gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-#                       gee_datestart = "2019-04-01",
-#                       gee_dateend = "2019-06-30",
-#                       gee_desc = "GIN_LC_2019AprJun",
-#                       ldrive_dsn = "GIN_2021/GIN_LC_2019AprJun")
+gin.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                                 gee_polygons = "users/ifeanyiedochie/gin_poly",
+                                 gee_datestart = "2018-07-01",
+                                 gee_dateend = "2018-09-30",
+                                 gee_desc = "GIN_NTL_2018JulSep",
+                                 ldrive_dsn = "GIN_2021/GIN_NTL_2018JulSep")
+gin.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                                  gee_polygons = "users/ifeanyiedochie/gin_poly",
+                                  gee_datestart = "2019-04-01",
+                                  gee_dateend = "2019-06-30",
+                                  gee_desc = "GIN_NTL_2019AprJun",
+                                  ldrive_dsn = "GIN_2021/GIN_NTL_2019AprJun")
+##name the ntl indicator real quick
+ginntl_julsep.dt <- sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2018JulSep_2021_04_08_12_56_31")
+ginntl_aprjun.dt <- sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2019AprJun_2021_04_08_12_50_58")
+
+names(ginntl_aprjun.dt)[names(ginntl_aprjun.dt) == "mean"] <- "mean_ntlaprjun19"
+names(ginntl_julsep.dt)[names(ginntl_julsep.dt) == "mean"] <- "mean_ntljulsep18"
+
+
+gin.no2 <- gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                        gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
+                        gee_band = "tropospheric_NO2_column_number_density",
+                        gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
+                        gee_datestart = "2018-07-01",
+                        gee_dateend = "2018-09-30",
+                        gee_desc = "GIN_NO2_2018JulSep",
+                        ldrive_dsn = "GIN_2021/GIN_NO2_2018JulSep")
+ginno2_julsep.dt <- sf::st_read(dsn = "GIN_2021", layer = "GIN_NO2_2018JulSep_2021_04_08_13_38_59")
+names(ginno2_julsep.dt)[names(ginno2_julsep.dt) == "mean"] <- "mean_no2julsep18"
+
+gin.no21 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                                  gee_polygons = "users/ifeanyiedochie/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
+                                  gee_band = "tropospheric_NO2_column_number_density",
+                                  gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
+                                  gee_datestart = "2019-04-01",
+                                  gee_dateend = "2019-06-30",
+                                  gee_desc = "GIN_NO2_2019AprJun",
+                                  ldrive_dsn = "GIN_2021/GIN_NO2_2019AprJun")
+##pull in the landcover data
+SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                      gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
+                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                   "moss-coverfraction"),
+                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                      gee_datestart = "2018-07-01",
+                      gee_dateend = "2018-09-30",
+                      gee_desc = "GIN_LC_2018JulSep",
+                      ldrive_dsn = "GIN_2021/GIN_LC_2018JulSep")
+
+SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                      gee_polygons = "users/ifeanyiedochie/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
+                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                   "moss-coverfraction"),
+                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                      gee_datestart = "2019-04-01",
+                      gee_dateend = "2019-06-30",
+                      gee_desc = "GIN_LC_2019AprJun",
+                      ldrive_dsn = "GIN_2021/GIN_LC_2019AprJun")
+
+
+## pull the data on impervious surface
+SAEplus::gee_pullimage(gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
+                       gee_band = "change_year_index",
+                       gee_dataname = "Tsinghua/FROM-GLC/GAIA/v10",
+                       gee_desc = "GIN_IS_2018JulSep",
+                       ldrive_dsn = "GIN_2021/GIN_IS_2018JulSep")
+
+# include other GEE data on CO, global human modification, gridmet drought data
+SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                      gee_polygons = "users/ifeanyiedochie/GIN_NTL_2018JulSep_2021_04_08_12_56_31",
+                      gee_band = c("CO_column_number_density", "H2O_column_number_density",
+                                   "cloud_height"),
+                      gee_dataname = "COPERNICUS/S5P/NRTI/L3_CO",
+                      gee_datestart = "2018-07-01",
+                      gee_dateend = "2018-09-30",
+                      gee_desc = "GIN_CO_2018JulSep",
+                      ldrive_dsn = "GIN_2021/GIN_CO_2018JulSep",
+                      gee_crs = "WGS84")
+
+SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/sous_prefectures",
+                      gee_polygons = "users/ifeanyiedochie/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
+                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                   "moss-coverfraction"),
+                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                      gee_datestart = "2019-04-01",
+                      gee_dateend = "2019-06-30",
+                      gee_desc = "GIN_LC_2019AprJun",
+                      ldrive_dsn = "GIN_2021/GIN_LC_2019AprJun")
 
 ### merge the datasets received from google earth engine
 
@@ -142,13 +142,13 @@ gin.base <- sf::st_read(dsn = "GIN_2021", layer = "sous_prefectures")
 gin_gee.dt <- data.table::setDT(sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2018JulSep_2021_04_08_12_56_31"))
 data.table::setnames(gin_gee.dt, "mean", "ntl_2018julsep")
 
-dt <- data.table::setDT(sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2019AprJun_2021_04_08_12_50_58")) 
+dt <- data.table::setDT(sf::st_read(dsn = "GIN_2021", layer = "GIN_NTL_2019AprJun_2021_04_08_12_50_58"))
 
 gin_gee.dt <- dt[,c("id", "mean")][gin_gee.dt, on = "id"]
 data.table::setnames(gin_gee.dt, "mean", "ntl_2019aprjun")
 
 ### adding and merging in NO2 data
-dt <- data.table::setDT(sf::st_read(dsn = "GIN_2021", layer = "GIN_NO2_2018JulSep_2021_04_08_13_38_59")) 
+dt <- data.table::setDT(sf::st_read(dsn = "GIN_2021", layer = "GIN_NO2_2018JulSep_2021_04_08_13_38_59"))
 gin_gee.dt <- dt[,c("id", "mean")][gin_gee.dt, on = "id"]
 data.table::setnames(gin_gee.dt, "mean", "no2_2018julsep")
 
@@ -202,35 +202,35 @@ gin_gee.dt <- sf::st_as_sf(gin_gee.dt, crs = "WGS84", agr = "constant")
 
 ## combine all building stats
 ### list all building tif data in the GIN folder
-### take the sums of count, area, total length and then averages for density, urban, mean area, cv_area, mean length, 
-### cv length, 
-dt <- SAEplus::gengrid(dsn = "./../S2S-REMDI/GIN_2021", 
-                       layer = "sous_prefectures", 
-                       raster_tif = "GIN_buildings_v2_0_count.tif", 
+### take the sums of count, area, total length and then averages for density, urban, mean area, cv_area, mean length,
+### cv length,
+dt <- SAEplus::gengrid(dsn = "./../S2S-REMDI/GIN_2021",
+                       layer = "sous_prefectures",
+                       raster_tif = "GIN_buildings_v2_0_count.tif",
                        grid_shp = T,
                        featname = "bld_count",
                        drop_Zero = F)
 gin.bld.dt <- as.data.table(dt$polygon_dt)
-dt <- SAEplus::gengrid(dsn = "./../S2S-REMDI/GIN_2021", 
-                       layer = "sous_prefectures", 
-              raster_tif = "GIN_buildings_v2_0_cv_area.tif", 
+dt <- SAEplus::gengrid(dsn = "./../S2S-REMDI/GIN_2021",
+                       layer = "sous_prefectures",
+              raster_tif = "GIN_buildings_v2_0_cv_area.tif",
               stats = "mean",
               grid_shp = T,
               featname = "bld_cvarea",
               drop_Zero = F)
 add.dt <- as.data.table(dt$polygon_dt)
 gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_cvarea"])
-dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021", 
-              layer = "sous_prefectures", 
-              raster_tif = "GIN_buildings_v2_0_cv_length.tif", 
+dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021",
+              layer = "sous_prefectures",
+              raster_tif = "GIN_buildings_v2_0_cv_length.tif",
               stats = "mean",
               grid_shp = T,
               featname = "bld_cvlength",
               drop_Zero = F)
 add.dt <- as.data.table(dt$polygon_dt)
 gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_cvlength"])
-dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021", 
-              layer = "sous_prefectures", 
+dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021",
+              layer = "sous_prefectures",
               raster_tif = "GIN_buildings_v2_0_density.tif",
               stats = "mean",
               grid_shp = T,
@@ -238,18 +238,18 @@ dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021",
               drop_Zero = F)
 add.dt <- as.data.table(dt$polygon_dt)
 gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_density"])
-dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021", 
-              layer = "sous_prefectures", 
-              raster_tif = "GIN_buildings_v2_0_mean_area.tif", 
+dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021",
+              layer = "sous_prefectures",
+              raster_tif = "GIN_buildings_v2_0_mean_area.tif",
               stats = "mean",
               grid_shp = T,
               featname = "bld_meanarea",
               drop_Zero = F)
 add.dt <- as.data.table(dt$polygon_dt)
 gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_meanarea"])
-dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021", 
-              layer = "sous_prefectures", 
-              raster_tif = "GIN_buildings_v2_0_total_length.tif", 
+dt <- gengrid(dsn = "./../S2S-REMDI/GIN_2021",
+              layer = "sous_prefectures",
+              raster_tif = "GIN_buildings_v2_0_total_length.tif",
               grid_shp = T,
               stats = "mean",
               featname = "bld_totallength",
@@ -260,8 +260,8 @@ saveRDS(gin.bld.dt, "GIN_allbuilding.RDS")
 
 
 ## write the data into a shapefile format that can be used to do other work
-sf::st_write(st_as_sf(gin.bld.dt, crs = "WGS84", agr = "constant"), 
-             layer = "GIN_allbuilding", dsn = "GIN_2021", 
+sf::st_write(st_as_sf(gin.bld.dt, crs = "WGS84", agr = "constant"),
+             layer = "GIN_allbuilding", dsn = "GIN_2021",
              driver = "ESRI Shapefile")
 
 ## pull process and join the osm data
@@ -298,9 +298,9 @@ data.table::dcast(gin.lines[[1]], id ~ highway,
                   value.var = c("roaddensity", "count", "length"),
                   fun.aggregate = mean)
 
-ginmp.dt <- 
-  data.table::dcast(gin.mp[[1]], 
-                    id ~ amenity, 
+ginmp.dt <-
+  data.table::dcast(gin.mp[[1]],
+                    id ~ amenity,
                     value.var = "count",
                     fun.aggregate = mean)
 
@@ -345,19 +345,19 @@ saveRDS(gin_master.dt, file = "GIN_2021/GIN_master.RDS")
 ###### pulling data for CHAD
 tcd.base <- sf::st_read(dsn = "TCD_2021", layer = "Dept_Tchad")
 
-tcd.grid <- SAEplus::gengrid(dsn = "TCD_2021", layer = "Dept_Tchad", 
+tcd.grid <- SAEplus::gengrid(dsn = "TCD_2021", layer = "Dept_Tchad",
                              raster_tif = "tcd_ppp_2020_UNadj_constrained.tif")
 
 sf::st_write(tcd.grid$polygon_dt, dsn = "TCD_2021", layer = "tcd_poppoly", driver = "ESRI Shapefile")
 
-tcd.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/Dept_Tchad", 
+tcd.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/Dept_Tchad",
                                  gee_polygons = "users/ifeanyiedochie/Dept_Tchad",
                                  gee_datestart = "2018-09-01",
                                  gee_dateend = "2018-12-31",
                                  gee_desc = "TCD_NTL_2018SepDec",
                                  ldrive_dsn = "TCD_2021/TCD_NTL_2018SepDec")
 
-tcd.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/Dept_Tchad", 
+tcd.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/Dept_Tchad",
                         gee_polygons = "users/ifeanyiedochie/Dept_Tchad",
                         gee_datestart = "2019-04-01",
                         gee_dateend = "2019-06-31",
@@ -393,20 +393,20 @@ saveRDS(tcd.points, file = "./../S2S-REMDI/TCD_2021/TCD_points_obj") #save the o
 
 gnb.base <- sf::st_read(dsn = "GNB_2021", layer = "afr_mli_l04_2002")
 
-gnb.grid <- SAEplus::gengrid(dsn = "GNB_2021", layer = "afr_gnb_l04_2002", 
+gnb.grid <- SAEplus::gengrid(dsn = "GNB_2021", layer = "afr_gnb_l04_2002",
                              raster_tif = "gnb_ppp_2020_UNadj_constrained.tif")
 
 
 sf::st_write(gnb.grid$polygon_dt, dsn = "GNB_2021", layer = "gnb_poppoly", driver = "ESRI Shapefile")
 
-gnb.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/afr_gnb_l04_2002", 
+gnb.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/afr_gnb_l04_2002",
                                  gee_polygons = "users/ifeanyiedochie/gnb_poppoly",
                                  gee_datestart = "2018-09-01",
                                  gee_dateend = "2018-12-31",
                                  gee_desc = "TCD_NTL_2018SepDec",
                                  ldrive_dsn = "TCD_2021/TCD_NTL_2018SepDec")
 
-gnb.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/afr_gnb_l04_2002", 
+gnb.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/afr_gnb_l04_2002",
                                   gee_polygons = "users/ifeanyiedochie/gnb_poppoly",
                                   gee_datestart = "2019-04-01",
                                   gee_dateend = "2019-06-31",
@@ -439,20 +439,20 @@ saveRDS(gnb.points, file = "./../S2S-REMDI/GNB_2021/GNB_points_obj") #save the o
 
 mli.base <- sf::st_read(dsn = "MLI_2021", layer = "MLI_adm4")
 
-mli.grid <- SAEplus::gengrid(dsn = "MLI_2021", layer = "MLI_adm4", 
+mli.grid <- SAEplus::gengrid(dsn = "MLI_2021", layer = "MLI_adm4",
                              raster_tif = "mli_ppp_2020_UNadj_constrained.tif")
 
 
 sf::st_write(mli.grid$polygon_dt, dsn = "MLI_2021", layer = "mli_poppoly", driver = "ESRI Shapefile")
 
-mli.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/MLI_adm4", 
+mli.ntl <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/MLI_adm4",
                                  gee_polygons = "users/ifeanyiedochie/MLI_adm4",
                                  gee_datestart = "2018-10-01",
                                  gee_dateend = "2018-12-31",
                                  gee_desc = "MLI_NTL_2018OctDec",
                                  ldrive_dsn = "MLI_2021/MLI_NTL_2018OctDec")
 
-mli.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/MLI_adm4", 
+mli.ntl2 <- SAEplus::gee_datapull(gee_boundary = "users/ifeanyiedochie/MLI_adm4",
                                   gee_polygons = "users/ifeanyiedochie/MLI_adm4",
                                   gee_datestart = "2019-04-01",
                                   gee_dateend = "2019-07-31",
@@ -465,7 +465,7 @@ mli.building <- SAEplus::wpopbuilding_pull(iso = "MLI", ldrive_dsn = "MLI_2021",
 mli.osm <- SAEplus::osm_datapull(country = "Mali",
                                  ldrive = "C:/Users/ifean/Documents/WorldBankWork/SAEPlus_Other")
 
-mli.lines <- SAEplus::osm_processlines(shapefile_path = "MLI_2021/MLI_adm4.shp", 
+mli.lines <- SAEplus::osm_processlines(shapefile_path = "MLI_2021/MLI_adm4.shp",
                                        geoid_var = "NAME_4",
                                        osm_path = "C:/Users/ifean/Documents/WorldBankWork/SAEPlus_Other/Mali_osmlines")
 saveRDS(mli.lines, file = "./../S2S-REMDI/MLI_2021/mli_lines_obj")
