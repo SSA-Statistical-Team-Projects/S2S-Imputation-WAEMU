@@ -1,0 +1,30 @@
+##### ------------------------------------------------------------------------------------------------------------------------- #####
+
+This file is being put together to organize our project towards running the models for performing small area estimation. This document will be a source for taking notes and keeping track of what needs to be done.
+
+
+To do list:
+
+
+1 - First, all the data needs to be pulled in for GNB, TCD and MLI. GIN data pulls have already been performed and the data is being used to develop the SAE package. In the meantime, however, the same must now be done for the remaining three aforementioned countries
+(Assigned to Daylan)
+
+2 - In the meantime, functions have already been developed for performing the pulls. Those functions that pull OSM data need to be updated (Assigned to Ify) to return datasets in wide rather than long format. More functions also need to be written in the meantime to merge the OSM data to the GEE data based on the corresponding geometries and return a dataset containing geometries (polygons), geometry IDs and corresponding administrative areas. (Assigned to Ify)
+
+3 - Then Daylan/Rahimatou can merge the pulled datasets and use the machinery created in step 2 to begin work
+
+4 - After that, the next step is to write function(s) in SAEplus that create(s) synthetic census. This can be estimate the number of households in each grid by calculating an average household size for each state, and then dividing estimated population (from Worldpop) by the estimated household size (Ify).
+
+Then we will want to construct two datasets:
+
+A sample dataset that contains the sample weight, transformed per capita consumption (y_t), and all model variables (it looks like we have 16 right now for Guinea). Each row is a sample household.
+A synthetic census dataset that contains all model  variables and average household size. Each grid will have pop/average household size synthetic household observations. Each row is a “census household”
+
+Then Ify will run the EMDI package for the household level data model
+
+
+5 - Rahimatou and Daylan will repeat step 4 for GNB, MLI and TCD
+
+
+
+
