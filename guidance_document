@@ -4,27 +4,21 @@ This file is being put together to organize our project towards running the mode
 
 
 To do list:
+1 - In the meantime, functions have already been developed for performing the pulls. Those functions that pull OSM data need to be updated (Assigned to Ify) to return datasets in wide rather than long format. More functions also need to be written in the meantime to merge the OSM data to the GEE data based on the corresponding geometries and return a dataset containing geometries (polygons), geometry IDs and corresponding administrative areas. (Assigned to Ify) DUE DATE: 4/25 (CoB)
 
+2 - Next step is to write function(s) in SAEplus that create(s) synthetic census. Estimate the number of households in each grid by calculating an average household size for each state, and then dividing estimated population (from Worldpop) by the estimated household size (Rahimatou and Ify).
 
-1 - First, all the data needs to be pulled in for GNB, TCD and MLI. GIN data pulls have already been performed and the data is being used to develop the SAE package. In the meantime, however, the same must now be done for the remaining three aforementioned countries
-(Assigned to Daylan)
+The function should return two objects:
 
-2 - In the meantime, functions have already been developed for performing the pulls. Those functions that pull OSM data need to be updated (Assigned to Ify) to return datasets in wide rather than long format. More functions also need to be written in the meantime to merge the OSM data to the GEE data based on the corresponding geometries and return a dataset containing geometries (polygons), geometry IDs and corresponding administrative areas. (Assigned to Ify)
+  * A sample dataset that contains the sample weight, transformed per capita consumption (y_t), and all model variables (it looks like we have 16 right now for Guinea). Each row is a sample household.
+  * A synthetic census dataset that contains all model  variables and average household size. Each grid will have pop/average household size synthetic household observations. Each row is a “census household” (DUE DATE : 4/26 CoB)
 
-3 - Then Daylan/Rahimatou can merge the pulled datasets and use the machinery created in step 2 to begin work
+3 - Ify will run EMDI to perform small area estimation on GIN. (DUE DATE : 4/27 CoB)
 
-4 - After that, the next step is to write function(s) in SAEplus that create(s) synthetic census. This can be estimate the number of households in each grid by calculating an average household size for each state, and then dividing estimated population (from Worldpop) by the estimated household size (Ify).
+4 - For GNB, TCD and MLI, the geospatial data needs to be pulled using the SAEplus package functions. Sample scripts are in the S2S-Imputation-WAEMU Github project repo. GIN data pulls have already been performed and the data is being used to develop the SAE package. In this stage we are just replicating that GIN_datapull for the other three countries. The sample code is already in the InputData folder, please note that the file paths are obviously wrong. (Assigned to Daylan) : (DUE DATE : 4/30 CoB)
 
-Then we will want to construct two datasets:
+5 - Use the function(s) created in step 2 to generate synthetic census for GNB, TCD and MLI. Assigned to Daylan (DUE DATE: 5/4 CoB)
 
-A sample dataset that contains the sample weight, transformed per capita consumption (y_t), and all model variables (it looks like we have 16 right now for Guinea). Each row is a sample household.
-A synthetic census dataset that contains all model  variables and average household size. Each grid will have pop/average household size synthetic household observations. Each row is a “census household”
-
-Then Ify will run the EMDI package for the household level data model
-
-
-5 - Rahimatou and Daylan will repeat step 4 for GNB, MLI and TCD
-
-
+6 - Rahimatou and Daylan can then the small area estimations for the three countries for the household level data. (DUE DATE : 5/7 CoB)
 
 
