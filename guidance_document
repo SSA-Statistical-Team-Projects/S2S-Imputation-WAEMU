@@ -10,7 +10,7 @@ To do list:
 
 The function should return two objects:
 
-  * A sample dataset that contains the sample weight, transformed per capita consumption (y_t), and all model variables (it looks like we have 16 right now for Guinea). Each row is a sample household.
+  * A sample dataset that contains the sample weight, transformed per capita consumption (y_t), and all model variables (it looks like we have 16 right now for Guinea). Each row is a sample household. (Ify to work up to here and leave part 2 for Rahimatou, if necessary)
   * A synthetic census dataset that contains all model  variables and average household size. Each grid will have pop/average household size synthetic household observations. Each row is a “census household” (DUE DATE : 4/26 CoB)
 
 3 - Ify will run EMDI to perform small area estimation on GIN. (DUE DATE : 4/27 CoB)
