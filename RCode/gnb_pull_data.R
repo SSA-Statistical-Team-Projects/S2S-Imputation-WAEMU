@@ -23,7 +23,7 @@ library(osmdata)
 library(dplyr)
 
 
-gnb.base <- sf::st_read(dsn = "GNB_2021", layer = "afr_gnb_l04_2002")
+gnb.base <- sf::st_read(dsn = "InputData", layer = "afr_gnb_l04_2002")
 
 gnb.grid <- SAEplus::gengrid(dsn = "InputData", layer = "afr_gnb_l04_2002",
                             raster_tif = "gnb_ppp_2020_UNadj_constrained.tif",
@@ -52,26 +52,39 @@ gnb.ntl2 <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                                   ldrive_dsn = "GNB_2021/GNB_NTL_2019AprJun")
 
 ##name the ntl indicator real quick
- gibntl_sepdec.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NTL_2018SepDec")
-gnbntl_aprjun.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NTL_2019AprJun")
+ gibntl_sepdec.dt <- sf::st_read(dsn = "InoutData", layer = "GNB_NTL_2018SepDec")
+gnbntl_aprjun.dt <- sf::st_read(dsn = "InputData", layer = "GNB_NTL_2019AprJun")
 #
-names(gnbntl_aprjun.dt)[names(gnbntl_aprjun.dt) == "mean"] <- "mean_ntlaprjun19"
-ames(gnbntl_sepdec.dt)[names(gnbntl_sepdec.dt) == "mean"] <- "mean_ntlsepdec18"
+names(gnbntl_aprjun.dt)[names(gnbntl_aprjun.dt) == "mean"] <- "mean_ntlaprjun"
+ames(gnbntl_sepdec.dt)[names(gnbntl_sepdec.dt) == "mean"] <- "mean_ntlsepdec"
 #
 #
 
-gnbno2_sepdec.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NO2_2018SepDec_2021_04_08_13_38_59")
- names(gnbno2_julsep.dt)[names(ginno2_julsep.dt) == "mean"] <- "mean_no2sepdec18"
-#
-gnb.no21 <- SAEplus::gee_datapull( email = "dasalm20@gmail.com",
-                                 gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+gin.no2 <- gee_datapull( email = "dasalm20@gmail.com",
+                         gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+                         gee_polygons = "users/dasalm20/gnb_poppoly",
+                         gee_band = "tropospheric_NO2_column_number_density",
+                        gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
+                        gee_datestart = "2018-09-01",
+                        gee_dateend = "2018-12-31",
+                        gee_desc = "GNB_NO2_2018SepDec",
+                        ldrive_dsn = "GNB_2021/GNB_NO2_2018SepDec")
+
+ginno2_sepdec.dt <- sf::st_read(dsn = "InputData", layer = "GNB_NO2_2018SepDec_2021_04_28_11_41_33")
+names(ginno2_sepdec.dt)[names(ginno2_sepdec.dt) == "mean"] <- "mean_no2sepdec"
+
+gin.no21 <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
+                                  gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
                                    gee_polygons = "users/dasalm20/gnb_poppoly",
-                                 gee_band = "tropospheric_NO2_column_number_density",
-                                  gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
-                                  gee_datestart = "2019-04-01",
-                                   gee_dateend = "2019-06-30",
+                                  gee_band = "tropospheric_NO2_column_number_density",
+                                    gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
+                                   gee_datestart = "2019-04-01",
+                                 gee_dateend = "2019-06-30",
                                   gee_desc = "GNB_NO2_2019AprJun",
-                                 ldrive_dsn = "GNB_2021/GIN_NO2_2019AprJun")
+                                   ldrive_dsn = "GNB_2021/GNB_NO2_2019AprJun")
+
+
+
 # ##pull in the landcover data
 SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                       gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
@@ -121,7 +134,7 @@ SAEplus::gee_datapull( email = "dasalm20@gmail.com",
                       ldrive_dsn = "GNB_2021/GNB_CO_2018SepDec",
                       gee_crs = "WGS84")
 #
-SAEplus::gee_datapull(email = "dasalm20@gmail.com"
+SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                       gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
                        gee_polygons = "users/dasalm20/gnb_poppoly",
                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
