@@ -25,14 +25,15 @@ library(dplyr)
 
 gnb.base <- sf::st_read(dsn = "GNB_2021", layer = "afr_gnb_l04_2002")
 
-gnb.grid <- SAEplus::gengrid(dsn = "GNB_2021", layer = "afr_gnb_l04_2002",
+gnb.grid <- SAEplus::gengrid(dsn = "InputData", layer = "afr_gnb_l04_2002",
                             raster_tif = "gnb_ppp_2020_UNadj_constrained.tif",
                             grid_shp = T,
-                            featname = "bld_count",
+                            featname = "population",
                            drop_Zero = F)
 
 
-sf::st_write(gnb.grid$polygon_dt, dsn = "GNB_2021", layer = "gnb_poppoly", driver = "ESRI Shapefile")
+sf::st_write(gnb.grid$polygon_dt, dsn = "InputData", layer = "gnb_poppoly", driver = "ESRI Shapefile",
+             append = F )
 
 gnb.ntl <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                                  gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
@@ -51,8 +52,8 @@ gnb.ntl2 <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                                   ldrive_dsn = "GNB_2021/GNB_NTL_2019AprJun")
 
 ##name the ntl indicator real quick
- gibntl_sepdec.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NTL_2018SepDec_2021_04_08_12_56_31")
-gnbntl_aprjun.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NTL_2019AprJun_2021_04_08_12_50_58")
+ gibntl_sepdec.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NTL_2018SepDec")
+gnbntl_aprjun.dt <- sf::st_read(dsn = "GNB_2021", layer = "GNB_NTL_2019AprJun")
 #
 names(gnbntl_aprjun.dt)[names(gnbntl_aprjun.dt) == "mean"] <- "mean_ntlaprjun19"
 ames(gnbntl_sepdec.dt)[names(gnbntl_sepdec.dt) == "mean"] <- "mean_ntlsepdec18"
