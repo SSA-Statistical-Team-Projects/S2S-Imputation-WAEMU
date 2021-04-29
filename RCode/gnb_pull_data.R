@@ -97,7 +97,7 @@ SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                       gee_datestart = "2018-09-01",
                       gee_dateend = "2018-12-31",
                       gee_desc = "GNB_LC_2018SepDec",
-                      ldrive_dsn = "GNB_2021/GIN_LC_2018JulSep")
+                      ldrive_dsn = "GNB_2021/GNB_LC_2018JulSep")
 
 SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                         gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
