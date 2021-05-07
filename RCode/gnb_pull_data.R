@@ -98,7 +98,7 @@ SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
                       ldrive_dsn = "InputData/GNB_LC_2018SepDec")
 
 SAEplus::gee_datapull(gee_boundary = "users/dasalm20/sous_prefectures",
-                      gee_polygons = "users/dasalm20/GIN_NTL_2019AprJun_2021_04_08_12_50_58",
+                      gee_polygons = "users/dasalm20/GNB_NTL_2019AprJun",
                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
                                    "water-permanent-coverfraction","water-seasonal-coverfraction",

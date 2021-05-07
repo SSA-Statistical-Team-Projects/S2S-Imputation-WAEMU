@@ -37,3 +37,12 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+#Input data files
+
+MLI_NO2_2018OctDec.shp
+MLI_NO2_2019AprJul.shp
+MLI_NTL_2018OctDec.shp
+MLI_NTL_2019AprJul.shp
+mli_poppoly.shp
+
