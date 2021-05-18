@@ -75,40 +75,37 @@ tcd.no2 <- gee_datapull(email = "dasalm20@gmail.com",
 tcdno2_sepdec.dt <- sf::st_read(dsn = "InputData", layer = "TCD_NO2_2018SepDec")
 names(tcdno2_sepdec.dt)[names(tcdno2_sepdec.dt) == "mean"] <- "mean_no2sepdec"
 
-tcd.no21 <- gee_datapull(gee_boundary = "users/dasalm20/afr_tcd_l02",
-                         gee_polygons = "users/dasalm20/gnb_poppoly",
+tcd.no21 <- gee_datapull(email = "dasalm20@gmail.com",
+                         gee_boundary = "users/dasalm20/afr_tcd_l02",
+                         gee_polygons = "users/dasalm20/tcd_poppoly",
                          gee_band = "tropospheric_NO2_column_number_density",
                          gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
                          gee_datestart = "2019-04-01",
                          gee_dateend = "2019-06-30",
                          gee_desc = "TCD_NO2_2019AprJun",
+                         gdrive_folder = "/SAEplus",
                          ldrive_dsn = "InputData/TCD_NO2_2019AprJun")
 
-#### pull in the landcover data
-SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_tcd_l02",
-                      gee_polygons = "users/dasalm20/tcd_poppoly",
-                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
-                                   "moss-coverfraction"),
-                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-                      gee_datestart = "2018-09-01",
-                      gee_dateend = "2018-12-31",
-                      gee_desc = "TCD_LC_2018SepDec",
-                      ldrive_dsn = "InputData/TCD_LC_2018SepDec")
+# pull the data on Landcover
+SAEplus::gee_pullimage(gee_polygons = "users/dasalm20/TCD_NTL_2018SepDec",
+                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                    "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                    "moss-coverfraction"),
+                       gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019",
+                       gee_desc = "GIN_LC_2018SepDec",
+                       ldrive_dsn = "InputData/GIN_LC_2018SepDec")
 
-SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_tcd_l02",
-                      gee_polygons = "users/dasalm20/TCD_NTL_2019AprJun",
-                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
-                                   "moss-coverfraction"),
-                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-                      gee_datestart = "2019-04-01",
-                      gee_dateend = "2019-06-30",
-                      gee_desc = "TCD_LC_2019AprJun",
-                      ldrive_dsn = "InputData/TCD_LC_2019AprJun")
 
+
+
+## pull the data on impervious surface
+SAEplus::gee_pullimage(email = "dasalm20@gmail.com",
+                       gee_polygons = "users/dasalm20/tcd_poppoly",
+                       gee_band = "change_year_index",
+                       gee_dataname = "Tsinghua/FROM-GLC/GAIA/v10",
+                       gee_desc = "TCD_IS_2018",
+                       ldrive_dsn = "InputData/TCD_IS_2018")
 
 
 available.dt <- SAEplus::wpopbuilding_vcheck()

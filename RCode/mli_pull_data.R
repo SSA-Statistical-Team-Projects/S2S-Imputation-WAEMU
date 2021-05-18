@@ -114,6 +114,18 @@ SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                       ldrive_dsn = "InputData/MLI_LC_2019AprJuL")
 
 
+## pull the data on impervious surface
+SAEplus::gee_pullimage(email = "dasalm20@gmail.com",
+                       gee_polygons = "users/dasalm20/mli_poppoly",
+                       gee_band = "change_year_index",
+                       gee_dataname = "Tsinghua/FROM-GLC/GAIA/v10",
+                       gee_desc = "MLI_IS_2018",
+                       ldrive_dsn = "InputData/MLI_IS_2018")
+
+
+
+
+
 
 available.dt <- SAEplus::wpopbuilding_vcheck()
 mli.building <- SAEplus::wpopbuilding_pull(iso = "MLI", ldrive_dsn = "MLI_2021", wpversion = "v1.1")
