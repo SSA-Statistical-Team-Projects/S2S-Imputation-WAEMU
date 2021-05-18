@@ -52,6 +52,7 @@ InputData/TCD_NO2_2019AprJun.shp
 InputData/TCD_NTL_2018SepDec.shp
 InputData/TCD_NTL_2019AprJun.shp
 InputData/TCD_IS_2018.shp
-
+OutputData/MLI_GEE.rds
+OutputData/TCD_GEE.rds
 
 

@@ -43,9 +43,7 @@ GNB_NO2 <- merge(GNB_NO2, GNB_IS,
 
 GNB_GEE.dt <- merge (GNB_NTL, GNB_NO2,
                      by = "id", all = TRUE)
-
-
-
+saveRDS(GNB_GEE.dt, file = "OutputData/GNB_GEE.rds")
 
 
 
@@ -122,6 +120,8 @@ TCD_NO2 <- merge(TCD_NO2, TCD_IS,
 
 TCD_GEE.dt <- merge (TCD_NTL, TCD_NO2,
                      by = "id", all = TRUE)
+
+##Save All Data
 
 
 
