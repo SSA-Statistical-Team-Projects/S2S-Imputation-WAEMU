@@ -23,9 +23,9 @@ library(osmdata)
 library(dplyr)
 
 
-gnb.base <- sf::st_read(dsn = "InputData", layer = "afr_gnb_l04_2002")
+gnb.base <- sf::st_read(dsn = "InputData", layer = "afr_gnb_l04")
 
-gnb.grid <- SAEplus::gengrid(dsn = "InputData", layer = "afr_gnb_l04_2002",
+gnb.grid <- SAEplus::gengrid(dsn = "InputData", layer = "afr_gnb_l04",
                              raster_tif = "gnb_ppp_2020_UNadj_constrained.tif",
                              grid_shp=T,
                              featname="population",
@@ -38,7 +38,7 @@ sf::st_write(gnb.grid$polygon_dt, dsn = "InputData", layer = "gnb_poppoly",
 ## pull in google earth engine
 #### pull in the night time lights
 gnb.ntl <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
-                                 gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+                                 gee_boundary = "users/dasalm20/afr_gnb_l04",
                                  gee_polygons = "users/dasalm20/gnb_poppoly",
                                  gee_datestart = "2018-09-01",
                                  gee_dateend = "2018-12-31",
@@ -46,7 +46,7 @@ gnb.ntl <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                                  ldrive_dsn = "InputData/GNB_NTL_2018SepDec")
 
 gnb.ntl2 <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
-                                  gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+                                  gee_boundary = "users/dasalm20/afr_gnb_l04",
                                   gee_polygons = "users/dasalm20/gnb_poppoly",
                                   gee_datestart = "2019-04-01",
                                   gee_dateend = "2019-06-30",
@@ -63,7 +63,7 @@ ames(gnbntl_sepdec.dt)[names(gnbntl_sepdec.dt) == "mean"] <- "mean_ntlsepdec"
 #
 #### pull in the NO2 data
 gnb.no2 <- gee_datapull(email = "dasalm20@gmail.com",
-                        gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+                        gee_boundary = "users/dasalm20/afr_gnb_l04",
                         gee_polygons = "users/dasalm20/gnb_poppoly",
                         gee_band = "tropospheric_NO2_column_number_density",
                         gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
@@ -75,7 +75,7 @@ gnb.no2 <- gee_datapull(email = "dasalm20@gmail.com",
 gnbno2_sepdec.dt <- sf::st_read(dsn = "InputData", layer = "GNB_NO2_2018SepDec")
 names(gnbno2_sepdec.dt)[names(gnbno2_sepdec.dt) == "mean"] <- "mean_no2sepdec"
 
-gnb.no21 <- gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+gnb.no21 <- gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
                         gee_polygons = "users/dasalm20/gnb_poppoly",
                         gee_band = "tropospheric_NO2_column_number_density",
                         gee_dataname = "COPERNICUS/S5P/NRTI/L3_NO2",
@@ -85,7 +85,7 @@ gnb.no21 <- gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
                         ldrive_dsn = "InputData/GNB_NO2_2019AprJun")
 
 #### pull in the landcover data
-SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04_2002",
+SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
                       gee_polygons = "users/dasalm20/gnb_poppoly",
                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
@@ -108,6 +108,17 @@ SAEplus::gee_datapull(gee_boundary = "users/dasalm20/sous_prefectures",
                       gee_dateend = "2019-06-30",
                       gee_desc = "GNB_LC_2019AprJun",
                       ldrive_dsn = "InputData/GNB_LC_2019AprJun")
+
+
+## pull the data on impervious surface
+SAEplus::gee_pullimage(email = "dasalm20@gmail.com",
+                       gee_polygons = "users/dasalm20/gnb_poppoly",
+                       gee_band = "change_year_index",
+                       gee_dataname = "Tsinghua/FROM-GLC/GAIA/v10",
+                       gee_desc = "GNB_IS_2018",
+                       ldrive_dsn = "InputData/GNB_IS_2018")
+
+
 
 
 
