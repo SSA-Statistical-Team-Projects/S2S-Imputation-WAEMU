@@ -87,14 +87,16 @@ tcd.no21 <- gee_datapull(email = "dasalm20@gmail.com",
                          ldrive_dsn = "InputData/TCD_NO2_2019AprJun")
 
 # pull the data on Landcover
-SAEplus::gee_pullimage(gee_polygons = "users/dasalm20/TCD_NTL_2018SepDec",
+SAEplus::gee_pullimage(email= "dasalm20@gmail.com",
+                       gee_polygons = "users/dasalm20/TCD_NTL_2018SepDec",
                        gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
                                     "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
                                     "water-permanent-coverfraction","water-seasonal-coverfraction",
                                     "moss-coverfraction"),
                        gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019",
-                       gee_desc = "GIN_LC_2018SepDec",
-                       ldrive_dsn = "InputData/GIN_LC_2018SepDec")
+                       gdrive_folder = "/SAEplus2",
+                       gee_desc = "TCD_LC_2018",
+                       ldrive_dsn = "InputData/TCD_LC_2018")
 
 
 

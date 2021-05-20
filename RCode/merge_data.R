@@ -1,5 +1,14 @@
-install.packages("data.table")           # Install and load data.table
-library("data.table")
+library(SAEplus)
+library(sf)
+library(nngeo)
+library(data.table)
+library(readstata13)
+library(maptools)
+library(rgdal)
+library(sp)
+library(osmdata)
+library(dplyr)
+library(data.table)
 
 
 ### merge the datasets received from google earth engine
@@ -9,121 +18,145 @@ library("data.table")
 
 ### adding and merging nighttimelights
 
-GNB_NTL1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NTL_2018SepDec")))
-data.table::setnames(GNB_NTL1, "mean", "ntl_2018SepDec")
+GNB_GEE.dt<-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NTL_2018SepDec")))
+data.table::setnames(GNB_GEE.dt, "mean", "ntl_2018SepDec")
 
-GNB_NTL2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NTL_2019AprJun")))
-data.table::setnames(GNB_NTL2, "mean", "ntl_2018AprJun")
-
-GNB_NTL <- merge(GNB_NTL1, GNB_NTL2,
-      by= "id", all = TRUE)
-
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NTL_2019AprJun")))
+GNB_GEE.dt <-dt[,c("id", "mean")][GNB_GEE.dt, on = "id"]
+data.table::setnames(GNB_GEE.dt, "mean", "ntl_2019AprJun")
 
 ### adding and merging NO2
-GNB_NO2_1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NO2_2018SepDec")))
-data.table::setnames(GNB_NO2_1, "mean", "no2_2018SepDec")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NO2_2018SepDec")))
+GNB_GEE.dt <-dt[,c("id", "mean")][GNB_GEE.dt, on = "id"]
+data.table::setnames(GNB_GEE.dt, "mean", "no2_2018SepDec")
 
-GNB_NO2_2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NO2_2019AprJun")))
-data.table::setnames(GNB_NO2_2, "mean", "no2_2018AprJun")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GNB_NO2_2019AprJun")))
+GNB_GEE.dt <-dt[,c("id", "mean")][GNB_GEE.dt, on = "id"]
+data.table::setnames(GNB_GEE.dt, "mean", "no2_2019AprJun")
 
-GNB_NO2 <- merge(GNB_NO2_1, GNB_NO2_2,
-                 by= "id", all = TRUE)
 
-### adding and merging IS Data into the GNB_NO2
+### adding and merging in Land Cover data
+
+dt <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "GNB_LC_2018"))
+GNB_GEE.dt <-dt[,c("id", "mean")][GNB_GEE.dt, on = "id"]
+data.table::setnames(GNB_GEE.dt, "mean", "lc_2018")
 
 ### adding and merging in Impervious surface data
-GNB_IS <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "GNB_IS_2018"))
+dt <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "GNB_IS_2018"))
+GNB_GEE.dt <-dt[,c("id", "mean")][GNB_GEE.dt, on = "id"]
+data.table::setnames(GNB_GEE.dt, "mean", "is_2018")
 
-data.table::setnames(GNB_IS, "mean", "GNB_IS_2018")
 
-GNB_NO2 <- merge(GNB_NO2, GNB_IS,
-                 by= "id", all = TRUE)
 
 ### Merge All and save
 
-GNB_GEE.dt <- merge (GNB_NTL, GNB_NO2,
-                     by = "id", all = TRUE)
-saveRDS(GNB_GEE.dt, file = "OutputData/GNB_GEE.rds")
+#saveRDS(GNB_GEE.dt, file = "OutputData/GNB_GEE.rds")
 
 
 
-## Mergin Data for MLI
+## Merge in Data for MLI
 
 ### adding and merging nighttimelights
 
-MLI_NTL1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NTL_2018OctDec")))
-data.table::setnames(MLI_NTL1, "mean", "ntl_2018OctDec")
+MLI_GEE.dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NTL_2018OctDec")))
+data.table::setnames(MLI_GEE.dt, "mean", "ntl_2018OctDec")
 
-MLI_NTL2 <- data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NTL_2019AprJul")))
-data.table::setnames(MLI_NTL2, "mean", "ntl_2018AprJuL")
-
-MLI_NTL <- merge(MLI_NTL1, MLI_NTL2,
-                 by= "id", all = TRUE)
+dt <- data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NTL_2019AprJul")))
+MLI_GEE.dt<-dt[,c("id", "mean")][MLI_GEE.dt, on = "id"]
+data.table::setnames(MLI_GEE.dt, "mean", "ntl_2019AprJuL")
 
 
 ### adding and merging NO2
-MLI_NO2_1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NO2_2018OctDec")))
-data.table::setnames(MLI_NO_1, "mean", "no2_2018OctDec")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NO2_2018OctDec")))
+MLI_GEE.dt<-dt[,c("id", "mean")][MLI_GEE.dt, on = "id"]
+data.table::setnames(MLI_GEE.dt, "mean", "no2_2018OctDec")
 
-MLI_NO2_2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NO2_2019AprJul")))
-data.table::setnames(MLI_NO2_2, "mean", "no2_2018AprJul")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "MLI_NO2_2019AprJul")))
+MLI_GEE.dt<-dt[,c("id", "mean")][MLI_GEE.dt, on = "id"]
+data.table::setnames(MLI_GEE.dt, "mean", "no2_2019AprJul")
 
-MLI_NO2 <- merge(MLI_NO2_1, MLI_NO2_2,
-                 by= "id", all = TRUE)
+
+### adding and merging in Land Cover data
+
+dt <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "MLI_LC_2018"))
+MLI_GEE.dt <-dt[,c("id", "mean")][MLI_GEE.dt, on = "id"]
+data.table::setnames(MLI_GEE.dt, "mean", "lc_2018")
+
 
 ### adding and merging IS Data into the NO2 Data
 
-MLI_IS <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "MLI_IS_2018"))
-data.table::setnames(MLI_IS, "mean", "MLI_IS_2018")
+dt<- data.table::setDT(sf::st_read(dsn = "InputData", layer = "MLI_IS_2018"))
+MLI_GEE.dt <-dt[,c("id", "mean")][MLI_GEE.dt, on = "id"]
+data.table::setnames(MLI_GEE.dt, "mean", "is_2018")
 
-MLI_NO2 <- merge(MLI_NO2, MLI_IS,
-                 by= "id", all = TRUE)
 
-### Merge All and save
 
-MLI_GEE.dt <- merge (MLI_NTL, MLI_NO2,
-                     by = "id", all = TRUE)
-saveRDS(MLI_GEE.dt, file = "OutputData/MLI_GEE.rds")
+## Divide Data into parts because >100MB
+#MLI_GEE  <- readRDS("OutputData/MLI_GEE.rds")
+
+
+MLI_GEE_part1 <- MLI_GEE.dt[1:437636,]
+
+MLI_GEE_part2 <- MLI_GEE.dt[437637:875272,]
+
+MLI_GEE_part3 <- MLI_GEE.dt[875273:1312907,]
+
+saveRDS(MLI_GEE_part1, file = "OutputData/MLI_GEE_part1.rds")
+saveRDS(MLI_GEE_part2, file = "OutputData/MLI_GEE_part2.rds")
+saveRDS(MLI_GEE_part3, file = "OutputData/MLI_GEE_part3.rds")
 
 
 
 
 ### Merging Data for TCD
 
-TCD_NTL1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NTL_2018SepDec")))
-data.table::setnames(TCD_NTL1, "mean", "ntl_2018SepDec")
+TCD_GEE.dt<-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NTL_2018SepDec")))
+data.table::setnames(TCD_GEE.dt, "mean", "ntl_2018SepDec")
 
-TCD_NTL2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NTL_2019AprJun")))
-data.table::setnames(TCD_NTL2, "mean", "ntl_2018AprJun")
-
-TCD_NTL <- merge(TCD_NTL1, TCD_NTL2,
-                 by= "id", all = TRUE)
-
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NTL_2019AprJun")))
+TCD_GEE.dt <-dt[,c("id", "mean")][TCD_GEE.dt, on = "id"]
+data.table::setnames(TCD_GEE.dt, "mean", "ntl_2019AprJun")
 
 ### adding and merging NO2
-TCD_NO2_1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NO2_2018SepDec")))
-data.table::setnames(TCD_NO2_1, "mean", "no2_2018SepDec")
+dt<-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NO2_2018SepDec")))
+TCD_GEE.dt <-dt[,c("id", "mean")][TCD_GEE.dt, on = "id"]
+data.table::setnames(TCD_GEE.dt, "mean", "no2_2018SepDec")
 
-TCD_NO2_2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NO2_2019AprJun")))
-data.table::setnames(TCD_NO2_2, "mean", "no2_2018AprJun")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "TCD_NO2_2019AprJun")))
+TCD_GEE.dt <-dt[,c("id", "mean")][TCD_GEE.dt, on = "id"]
+data.table::setnames(TCD_GEE.dt, "mean", "no2_2019AprJun")
 
-TCD_NO2 <- merge(TCD_NO2_1, TCD_NO2_2,
-                 by= "id", all = TRUE)
+
+### adding and merging in Land Cover data
+
+dt <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "TCD_LC_2018"))
+TCD_GEE.dt <-dt[,c("id", "mean")][TCD_GEE.dt, on = "id"]
+data.table::setnames(TCD_GEE.dt, "mean", "lc_2018")
 
 ### adding and merging IS Data  into the NO2 Data
 
-TCD_IS <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "TCD_IS_2018"))
-data.table::setnames(TCD_IS, "mean", "TCD_IS_2018")
+dt <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "TCD_IS_2018"))
+TCD_GEE.dt <-dt[,c("id", "mean")][TCD_GEE.dt, on = "id"]
+data.table::setnames(TCD_GEE.dt, "mean", "is_2018")
 
-TCD_NO2 <- merge(TCD_NO2, TCD_IS,
-                 by= "id", all = TRUE)
 
 ### Merge All and save
 
-TCD_GEE.dt <- merge (TCD_NTL, TCD_NO2,
-                     by = "id", all = TRUE)
+#saveRDS(TCD_GEE.dt, file = "OutputData/TCD_GEE.rds")
 
-saveRDS(TCD_GEE.dt, file = "OutputData/TCD_GEE.rds")
+
+## Divide Data into parts because >100MB
+
+
+TCD_GEE_part1 <- TCD_GEE.dt[1:438345,]
+
+TCD_GEE_part2 <- TCD_GEE.dt[438346:876690,]
+
+TCD_GEE_part3 <- TCD_GEE.dt[876691:1315035,]
+
+saveRDS(TCD_GEE_part1, file = "OutputData/TCD_GEE_part1.rds")
+saveRDS(TCD_GEE_part2, file = "OutputData/TCD_GEE_part2.rds")
+saveRDS(TCD_GEE_part3, file = "OutputData/TCD_GEE_part3.rds")
 
 
 
@@ -131,38 +164,55 @@ saveRDS(TCD_GEE.dt, file = "OutputData/TCD_GEE.rds")
 ### Merging Data for GIN
 
 
-GIN_NTL1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NTL_2018JulSep")))
-data.table::setnames(GIN_NTL1, "mean", "ntl_2018SepDec")
+GIN_GEE.dt<-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NTL_2018JulSep")))
 
-GIN_NTL2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NTL_2019AprJun")))
-data.table::setnames(GIN_NTL2, "mean", "ntl_2018AprJun")
 
-GIN_NTL <- merge(GIN_NTL1, GIN_NTL2,
-                 by= "id", all = TRUE)
+data.table::setnames(GIN_GEE.dt, "mean", "ntl_2018SepDec")
+
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NTL_2019AprJun")))
+GIN_GEE.dt <-dt[,c("id", "mean")][GIN_GEE.dt, on = "id"]
+data.table::setnames(GIN_GEE.dt, "mean", "ntl_2019AprJun")
+
+#GIN_NTL <- merge(GIN_NTL1, GIN_NTL2,
+         #        by= "id", all = TRUE)
 
 
 ### adding and merging NO2
-GIN_NO2_1 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NO2_2018JulSep")))
-data.table::setnames(GIN_NO2_1, "mean", "no2_2018SepDec")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NO2_2018JulSep")))
+GIN_GEE.dt <-dt[,c("id", "mean")][GIN_GEE.dt, on = "id"]
+data.table::setnames(GIN_GEE.dt, "mean", "no2_2018SepDec")
 
-GIN_NO2_2 <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NO2_2019AprJun")))
-data.table::setnames(GIN_NO2_2, "mean", "no2_2018AprJun")
+dt <-  data.table::setDT((sf::st_read(dsn = "InputData", layer = "GIN_NO2_2019AprJun")))
+GIN_GEE.dt <-dt[,c("id", "mean")][GIN_GEE.dt, on = "id"]
+data.table::setnames(GIN_GEE.dt, "mean", "no2_2019AprJun")
 
-GIN_NO2 <- merge(GIN_NO2_1, GIN_NO2_2,
-                 by= "id", all = TRUE)
+#GIN_NO2 <- merge(GIN_NO2_1, GIN_NO2_2,
+     #            by= "id", all = TRUE)
+
+
+
+dt <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "GIN_LC_2018JulSep"))
+GIN_GEE.dt <-dt[,c("id", "mean")][GIN_GEE.dt, on = "id"]
+data.table::setnames(GIN_GEE.dt, "mean", "lc_2018")
+
 
 ### adding and merging IS Data  into the NO2 Data
 
-GIN_IS <- data.table::setDT(sf::st_read(dsn = "InputData", layer = "GIN_IS_2018JulSep"))
-data.table::setnames(GIN_IS, "mean", "MLI_IS_2018")
+dt<- data.table::setDT(sf::st_read(dsn = "InputData", layer = "GIN_IS_2018JulSep"))
+GIN_GEE.dt <-dt[,c("id", "mean")][GIN_GEE.dt, on = "id"]
+data.table::setnames(GIN_GEE.dt, "mean", "is_2018")
 
-GIN_NO2 <- merge(GIN_NO2, GIN_IS,
-                 by= "id", all = TRUE)
+#GIN_NO2 <- merge(GIN_NO2, GIN_IS,
+               #  by= "id", all = TRUE)
+
+
+
+
 
 ### Merge All
 
-GIN_GEE.dt <- merge (GIN_NTL, GIN_NO2,
-                     by = "id", all = TRUE)
+#GIN_GEE.dt <- merge (GIN_NTL, GIN_NO2,
+                 #    by = "id", all = TRUE)
 
 saveRDS(GIN_GEE.dt, file = "OutputData/GIN_GEE.rds")
 
