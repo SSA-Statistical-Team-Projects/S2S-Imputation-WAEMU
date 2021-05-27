@@ -55,7 +55,7 @@ mli.ntl2 <- SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                                   ldrive_dsn = "MLI_2021/MLI_NTL_2019AprJul")
 
 ##name the ntl indicator real quick
-mlintl_sepdec.dt <- sf::st_read(dsn = "InoutData", layer = "MLI_NTL_2018OctDec")
+mlintl_sepdec.dt <- sf::st_read(dsn = "InputData", layer = "MLI_NTL_2018OctDec")
 mlintl_aprjun.dt <- sf::st_read(dsn = "InputData", layer = "MLI_NTL_2019AprJul")
 #
 names(mlintl_aprjun.dt)[names(mlintl_aprjul.dt) == "mean"] <- "mean_ntlaprjul"
@@ -100,18 +100,33 @@ SAEplus::gee_datapull(email = "dasalm20@gmail.com",
                       gee_desc = "MLI_LC_2018OctDec",
                       ldrive_dsn = "InputData/MLI_LC_2018OctDec")
 
-SAEplus::gee_datapull(email = "dasalm20@gmail.com",
-                      gee_boundary = "users/dasalm20/afr_mli_l04",
-                      gee_polygons = "users/dasalm20/MLI_NTL_2019AprJul",
-                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
-                                   "moss-coverfraction"),
-                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-                      gee_datestart = "2019-04-01",
-                      gee_dateend = "2019-07-31",
-                      gee_desc = "GNB_LC_2019AprJun",
-                      ldrive_dsn = "InputData/MLI_LC_2019AprJuL")
+##SAEplus::gee_datapull(email = "dasalm20@gmail.com",
+                   ##   gee_boundary = "users/dasalm20/afr_mli_l04",
+                   ##   gee_polygons = "users/dasalm20/MLI_NTL_2019AprJul",
+                    ##  gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                           #        "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                             #      "water-permanent-coverfraction","water-seasonal-coverfraction",
+                             #      "moss-coverfraction"),
+                      ##gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                     # gee_datestart = "2019-04-01",
+                     # gee_dateend = "2019-07-31",
+                     # gee_desc = "GNB_LC_2019AprJun",
+                      #ldrive_dsn = "InputData/MLI_LC_2019AprJuL")
+
+
+
+# pull the data on Landcover
+SAEplus::gee_pullimage(email= "dasalm20@gmail.com",
+                       gee_polygons = "users/dasalm20/MLI_NTL_2018OctDec",
+                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                    "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                    "moss-coverfraction"),
+                       gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019",
+                       gdrive_folder = "/SAEplus2",
+                       gee_desc = "MLI_LC_2018",
+                       ldrive_dsn = "InputData/MLI_LC_2018")
+
 
 
 ## pull the data on impervious surface

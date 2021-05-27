@@ -85,29 +85,45 @@ gnb.no21 <- gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
                         ldrive_dsn = "InputData/GNB_NO2_2019AprJun")
 
 #### pull in the landcover data
-SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
-                      gee_polygons = "users/dasalm20/gnb_poppoly",
-                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
-                                   "moss-coverfraction"),
-                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-                      gee_datestart = "2018-09-01",
-                      gee_dateend = "2018-12-31",
-                      gee_desc = "GNB_LC_2018SepDec",
-                      ldrive_dsn = "InputData/GNB_LC_2018SepDec")
+##SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
+                  #    gee_polygons = "users/dasalm20/gnb_poppoly",
+                   #   gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                    #               "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                     #              "water-permanent-coverfraction","water-seasonal-coverfraction",
+                     #              "moss-coverfraction"),
+                     # gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                     # gee_datestart = "2018-09-01",
+                     # gee_dateend = "2018-12-31",
+                     # gee_desc = "GNB_LC_2018SepDec",
+                     # ldrive_dsn = "InputData/GNB_LC_2018SepDec")
 
-SAEplus::gee_datapull(gee_boundary = "users/dasalm20/sous_prefectures",
-                      gee_polygons = "users/dasalm20/GNB_NTL_2019AprJun",
-                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
-                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
-                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
-                                   "moss-coverfraction"),
-                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
-                      gee_datestart = "2019-04-01",
-                      gee_dateend = "2019-06-30",
-                      gee_desc = "GNB_LC_2019AprJun",
-                      ldrive_dsn = "InputData/GNB_LC_2019AprJun")
+#SAEplus::gee_datapull(gee_boundary = "users/dasalm20/sous_prefectures",
+              #        gee_polygons = "users/dasalm20/GNB_NTL_2019AprJun",
+                 #     gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                   #                "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                   #                "water-permanent-coverfraction","water-seasonal-coverfraction",
+                    #               "moss-coverfraction"),
+                    #  gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                     # gee_datestart = "2019-04-01",
+                     # gee_dateend = "2019-06-30",
+                     # gee_desc = "GNB_LC_2019AprJun",
+                      #ldrive_dsn = "InputData/GNB_LC_2019AprJun")
+
+
+#### pull in the landcover data
+
+SAEplus::gee_pullimage(email= "dasalm20@gmail.com",
+                       gee_polygons = "users/dasalm20/GNB_NTL_2018SepDec",
+                       gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                    "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                    "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                    "moss-coverfraction"),
+                       gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global/2019",
+                       gdrive_folder = "/SAEplus2",
+                       gee_desc = "GNB_LC_2018",
+                       ldrive_dsn = "InputData/GNB_LC_2018")
+
+
 
 
 ## pull the data on impervious surface
