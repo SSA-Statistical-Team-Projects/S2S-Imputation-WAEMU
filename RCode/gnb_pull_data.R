@@ -135,26 +135,142 @@ SAEplus::gee_pullimage(email = "dasalm20@gmail.com",
                        ldrive_dsn = "InputData/GNB_IS_2018")
 
 
+# include other GEE data on CO, global human modification, gridmet drought data
+SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
+                      gee_polygons = "users/dasalm20/gnb_poppoly",
+                      gee_band = c("CO_column_number_density", "H2O_column_number_density",
+                                   "cloud_height"),
+                      gee_dataname = "COPERNICUS/S5P/NRTI/L3_CO",
+                      gee_datestart = "2018-09-01",
+                      gee_dateend = "2018-12-31",
+                      gee_desc = "GNB_CO_2018SepDec",
+                      ldrive_dsn = "SAEplus2/GNB_CO_2018SepDec",
+                      gee_crs = "WGS84")
+
+SAEplus::gee_datapull(gee_boundary = "users/dasalm20/afr_gnb_l04",
+                      gee_polygons = "users/dasalm20/gnb_poppoly",
+                      gee_band = c("tree-coverfraction","urban-coverfraction","grass-coverfraction",
+                                   "shrub-coverfraction","crops-coverfraction","bare-coverfraction",
+                                   "water-permanent-coverfraction","water-seasonal-coverfraction",
+                                   "moss-coverfraction"),
+                      gee_dataname = "COPERNICUS/Landcover/100m/Proba-V-C3/Global",
+                      gee_datestart = "2019-04-01",
+                      gee_dateend = "2019-06-30",
+                      gee_desc = "GIN_LC_2019AprJun",
+                      ldrive_dsn = "SAEplus2/GIN_LC_2019AprJun")
 
 
 
-available.dt <- SAEplus::wpopbuilding_vcheck()
-gnb.building <- SAEplus::wpopbuilding_pull(iso = "GNB", ldrive_dsn = "GNB_2021", wpversion = "v1.1")
-
-gnb.osm <- SAEplus::osm_datapull(country = "Guinea Bissau",
-                                 ldrive = "/Users/daylansalmeron/Documents/R_git_pro/SAEPlus_other")
-
-gnb.lines <- SAEplus::osm_processlines(shapefile_path = "GNB_2021/gnb_poppoly.shp",
-                                       osm_path = "/Users/daylansalmeron/Documents/R_git_pro/SAEPlus_other/Guinea_Bissau_osmlines")
-saveRDS(gnb.lines, file = "./../S2S-REMDI/GNB_2021/GNB_lines_obj")
 
 
-gnb.mp <- SAEplus::osm_processmp(shapefile_path = "GNB_2021/gnb_poppoly.shp",
-                                 osm_path = "/Users/daylansalmeron/Documents/R_git_pro/SAEPlus_other/Guinea_Bissau_osmmp")
 
-saveRDS(gnb.mp, file = "./../S2S-REMDI/GNB_2021/GNB_mp_obj")
 
-gnb.points <- SAEplus::osm_processpoints(shapefile_path = "GNB_2021/gnb_poppoly.shp",
-                                         osm_path = "/Users/daylansalmeron/Documents/R_git_pro/SAEPlus_other/Guinea_Bissau_osmpoints")
+###### Next, we try to pull in all the building data
+#available.dt <- SAEplus::wpopbuilding_vcheck()
+#gnb.building <- wpopbuilding_pull(iso = "GNB", ldrive_dsn = "InputData")
 
-saveRDS(gnb.points, file = "./../S2S-REMDI/GNB_2021/GNB_points_obj") #save the object as RData
+
+## combine all building stats
+### list all building tif data in the GIN folder
+### take the sums of count, area, total length and then averages for density, urban, mean area, cv_area, mean length,
+### cv length,
+dt <- SAEplus::gengrid(dsn = "InputData",
+                       layer = "afr_gnb_l04",
+                       raster_tif = "GNB_buildings_v2_0_count.tif",
+                       grid_shp = T,
+                       featname = "bld_count",
+                       drop_Zero = F)
+gin.bld.dt <- as.data.table(dt$polygon_dt)
+dt <- SAEplus::gengrid(dsn = "INputData",
+                       layer = "afr_gnb_l04",
+                       raster_tif = "GNB_buildings_v2_0_cv_area.tif",
+                       stats = "mean",
+                       grid_shp = T,
+                       featname = "bld_cvarea",
+                       drop_Zero = F)
+add.dt <- as.data.table(dt$polygon_dt)
+gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_cvarea"])
+dt <- gengrid(dsn = "InputData",
+              layer = "afr_gnb_l04",
+              raster_tif = "GNB_buildings_v2_0_cv_length.tif",
+              stats = "mean",
+              grid_shp = T,
+              featname = "bld_cvlength",
+              drop_Zero = F)
+add.dt <- as.data.table(dt$polygon_dt)
+gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_cvlength"])
+dt <- gengrid(dsn = "InputData",
+              layer = "afr_gnb_l04",
+              raster_tif = "GNB_buildings_v2_0_density.tif",
+              stats = "mean",
+              grid_shp = T,
+              featname = "bld_density",
+              drop_Zero = F)
+add.dt <- as.data.table(dt$polygon_dt)
+gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_density"])
+dt <- gengrid(dsn = "InputData",
+              layer = "afr_gnb_l04",
+              raster_tif = "GNB_buildings_v2_0_mean_area.tif",
+              stats = "mean",
+              grid_shp = T,
+              featname = "bld_meanarea",
+              drop_Zero = F)
+add.dt <- as.data.table(dt$polygon_dt)
+gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_meanarea"])
+dt <- gengrid(dsn = "InputData",
+              layer = "afr_gnb_l04",
+              raster_tif = "GNB_buildings_v2_0_total_length.tif",
+              grid_shp = T,
+              stats = "mean",
+              featname = "bld_totallength",
+              drop_Zero = F)
+add.dt <- as.data.table(dt$polygon_dt)
+gin.bld.dt <- cbind(gin.bld.dt, add.dt[,"bld_totallength"])
+saveRDS(gin.bld.dt, "GNB_allbuilding.RDS")
+
+
+## write the data into a shapefile format that can be used to do other work
+sf::st_write(st_as_sf(gin.bld.dt, crs = "WGS84", agr = "constant"),
+             layer = "GIN_allbuilding", dsn = "GIN_2021",
+             driver = "ESRI Shapefile")
+
+## pull process and join the osm data
+gnb.osm <- osm_datapull(country = "Guinea-Bissau",
+                       ldrive = "/Users/daylansalmeron/Documents/R_git_pro/S2S-Imputation-WAEMU/InputData")
+
+gnb.lines <- SAEplus::osm_processlines(shapefile_path = "/Users/daylansalmeron/Documents/R_git_pro/S2S-Imputation-WAEMU/InputData/gnbp\_poppoly",
+                                       geoid_var = "id",
+osm_path = "/Users/daylansalmeron/Documents/R_git_pro/S2S-Imputation-WAEMU/InputData/Guinea-Bissau_osmlines")
+                                       saveRDS(gnb.lines, file = "InputData/GIN_lines_obj.RDS")
+
+
+gin.mp <- SAEplus::osm_processmp(shapefile_path = "./../S2S-REMDI/GIN_2021/GIN_allbuilding.shp",
+                                 geoid_var = "id",
+                                 osm_path = "C:/Users/ifean/Documents/WorldBankWork/SAEPlus_Other/Guinea_osmmp",
+                                 feature_var = "amenity")
+
+saveRDS(gin.mp, file = "./../S2S-REMDI/GIN_2021/GIN_mp_obj")
+
+gin.points <- SAEplus::osm_processpoints(shapefile_path = "./../S2S-REMDI/GIN_2021/GIN_allbuilding.shp",
+                                         geoid_var = "ADM3_CODE",
+                                         osm_path = "C:/Users/ifean/Documents/WorldBankWork/SAEPlus_Other/Guinea_osmpoints")
+
+saveRDS(gin.points, file = "./../S2S-REMDI/GIN_2021/GIN_points_obj") #save the object as RData
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
